@@ -1,7 +1,7 @@
 export default function Work() {
   return (
     <>
-      <h1 className="mb-6 text-2xl">Work</h1>
+      <h1 className="mb-6 text-2xl">Free Software</h1>
       <div className="space-y-8">
         <Section title="Software">
           <Item

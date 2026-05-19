@@ -27,9 +27,8 @@ export default function RootLayout({
               e10d
             </Link>
             <div className="flex items-center gap-6">
-              <Link href="/work" className="text-muted no-underline hover:text-fg dark:text-dark-muted dark:hover:text-dark-fg">Work</Link>
+              <Link href="/work" className="text-muted no-underline hover:text-fg dark:text-dark-muted dark:hover:text-dark-fg">Free Software</Link>
               <Link href="/consulting" className="text-muted no-underline hover:text-fg dark:text-dark-muted dark:hover:text-dark-fg">Consulting</Link>
-              <Link href="/blog" className="text-muted no-underline hover:text-fg dark:text-dark-muted dark:hover:text-dark-fg">Blog</Link>
               <Link href="/about" className="text-muted no-underline hover:text-fg dark:text-dark-muted dark:hover:text-dark-fg">About</Link>
               <ThemeToggle />
             </div>
