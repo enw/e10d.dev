@@ -19,26 +19,38 @@ This repo = the e10d.dev website only. Sub-products live in their own repos.
 ## Tech stack (this repo)
 
 - **Framework**: Next.js (App Router, TS)
-- **UI**: Tailwind, ShadCN
+- **UI**: Tailwind v4 (CSS-first config in `globals.css`), no component library
+- **Font**: Source Serif 4 (via next/font/google), single typeface for everything
 - **Content**: Markdown files in-repo (MDX via next-mdx or similar)
 - **Hosting**: Vercel
 - **Domain**: e10d.dev (Vercel DNS)
 
-## Design philosophy
+## Design system
 
-- **Warm minimalism** — soft palette, human, slightly imperfect. Clean and sparse but not cold.
-- **Designing for decay** — choose elements that won't age poorly. Typography-driven, few images (images date a site), no trendy UI patterns (parallax, heavy animations). Content should read well even if CSS fails.
-- **Anti-accumulation** — don't add sections or features until content exists. Everything should be easy to remove.
+- **Warm minimalism / Zendo** — generous whitespace, minimal chrome, text as UI.
+- **Designing for decay** — typography-driven, few images, no trendy UI patterns. Content should read well even if CSS fails.
+- **Anti-accumulation** — don't add sections or features until content exists. Easy to remove.
+- **Light + dark mode** — class-based (`<html class="dark">`), system preference on first visit, persisted to localStorage.
+- **Color palette** — custom CSS variables in Tailwind `@theme`:
+
+  | Token | Light | Dark |
+  |---|---|---|
+  | `bg` | `#faf8f5` | `#141312` |
+  | `fg` | `#1a1817` | `#e8e4df` |
+  | `muted` | `#8a8580` | `#6b6560` |
+  | `accent` | `#b85a3a` | `#d4755a` |
+
+  Tailwind v4 custom colors used directly: `bg-bg text-fg text-muted text-accent dark:bg-dark-bg dark:text-dark-fg` etc.
 
 ## Site sections
 
-- `/` — Landing / brand page
-- `/blog` — Posts (Markdown in `content/blog/`)
-- `/work` — Portfolio / case studies
+- `/` — Landing
+- `/work` — Projects (grouped: Software / Experiments)
 - `/consulting` — Services description
-- `/about` — Bio / contact
+- `/blog` — No posts yet, placeholder
+- `/about` — Bio
 
-Keep it minimal. Add sections only when content exists.
+All routes are static (prerendered). Add sections only when content exists.
 
 ## Conventions
 
@@ -46,19 +58,16 @@ Keep it minimal. Add sections only when content exists.
 - **No emoji** unless user explicitly asks
 - Markdown frontmatter: `title`, `date`, `tags`, `description`
 - Prefer reading existing files before editing
-- Delete unused code outright (no dead code, no backwards-compat shims)
-- Validate only at boundaries (user input, external APIs)
+- Delete unused code outright
+- Validate only at boundaries
 - No abstractions for one-off operations
 
 ## Developer commands
 
-(TBD — populate as tooling is added)
-
 ```
 npm run dev        # dev server
-npm run build      # production build
-npm run lint       # lint
-npm run typecheck  # typecheck
+npm run build      # production build (includes lint + typecheck)
+npm run lint       # lint only
 ```
 
 ## Related context
