@@ -1,6 +1,10 @@
 # e10d – Agents.md
 
-e10d is Elliot's personal LLC and brand: software products, consulting (AI/LLM arch, full-stack, product strategy), and mentorship.
+e10d is Elliot's personal LLC and brand: consulting (AI/LLM arch, full-stack, product strategy), side projects, software engineering, mentorship, and advising.
+
+Brand rooted in Buddhist philosophy — embracing change and impermanence. "Designing for inevitable decay."
+
+Name origin: "Elliot Winard" → e(1)0(w)inard → e10d. Also reads as "e-tension" / "attention" (ML transformer concept).
 
 ## Repo structure
 
@@ -19,6 +23,12 @@ This repo = the e10d.dev website only. Sub-products live in their own repos.
 - **Content**: Markdown files in-repo (MDX via next-mdx or similar)
 - **Hosting**: Vercel
 - **Domain**: e10d.dev (Vercel DNS)
+
+## Design philosophy
+
+- **Warm minimalism** — soft palette, human, slightly imperfect. Clean and sparse but not cold.
+- **Designing for decay** — choose elements that won't age poorly. Typography-driven, few images (images date a site), no trendy UI patterns (parallax, heavy animations). Content should read well even if CSS fails.
+- **Anti-accumulation** — don't add sections or features until content exists. Everything should be easy to remove.
 
 ## Site sections
 
@@ -70,5 +80,4 @@ From `~/.me.toon`:
 ## Open questions / decisions pending
 
 - LeadPure brand relationship: sub-brand of e10d or standalone? (undecided)
-- Design: ShadCN selected by default, no theme chosen yet
 - Blog: MDX vs MD vs Contentlayer vs next-mdx-remote (TBD when content exists)
