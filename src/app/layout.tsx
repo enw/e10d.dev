@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Source_Serif_4 } from "next/font/google";
 import "./globals.css";
+import { OrbWalker } from "./orb-walker";
 
 const serif = Source_Serif_4({
   subsets: ["latin"],
@@ -19,8 +20,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={serif.variable}>
-      <body className="bg-bg text-fg antialiased selection:bg-accent/30 dark:bg-dark-bg dark:text-dark-fg dark:selection:bg-dark-accent/40">
+      <body className="flex min-h-screen flex-col bg-bg text-fg antialiased selection:bg-accent/30 dark:bg-dark-bg dark:text-dark-fg dark:selection:bg-dark-accent/40">
         <ThemeScript />
+        <PageBackdrop />
+        <OrbWalker />
         <header className="border-b border-border dark:border-dark-border">
           <nav className="mx-auto flex max-w-(--max-width-content) items-center justify-between px-4 py-4 text-sm">
             <Link href="/" className="text-fg no-underline hover:text-accent dark:text-dark-fg dark:hover:text-dark-accent">
@@ -34,7 +37,7 @@ export default function RootLayout({
             </div>
           </nav>
         </header>
-        <main className="mx-auto max-w-(--max-width-content) px-4 py-16">
+        <main className="mx-auto w-full max-w-(--max-width-content) flex-1 px-4 py-16">
           {children}
         </main>
         <footer className="border-t border-border dark:border-dark-border">
@@ -62,6 +65,10 @@ function ThemeToggle() {
   );
 }
 
+function PageBackdrop() {
+  return <div aria-hidden="true" className="page-backdrop" />;
+}
+
 function ThemeScript() {
   return (
     <script
@@ -75,11 +82,12 @@ function ThemeScript() {
           })();
           document.addEventListener('DOMContentLoaded', function() {
             var btn = document.getElementById('theme-toggle');
-            if (!btn) return;
-            btn.addEventListener('click', function() {
-              var isDark = document.documentElement.classList.toggle('dark');
-              localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            });
+            if (btn) {
+              btn.addEventListener('click', function() {
+                var isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+              });
+            }
           });
         `,
       }}
