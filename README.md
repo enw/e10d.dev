@@ -1,46 +1,24 @@
 # e10d.dev
 
-Personal site for Elliot Winard (e10d): consulting, free software, and writing.
+Source for [e10d.dev](https://e10d.dev) — Elliot Winard's site: consulting, projects, writing when there is something to say.
 
-Design principle: designing for inevitable decay.
+**e10d** is a numeronym for Elliot Winard. It also reads as *e-tend* — like attend.  e.g. attention, the thing transformers and good product work both optimize for.
 
-## Stack
+The site is built to **design for inevitable decay**: warm, typographic, light on chrome. If the stylesheet fails, the words should still carry.
 
-- Next.js (App Router, TypeScript)
-- Tailwind CSS v4
-- Source Serif 4 via `next/font/google`
-- Static routes, deployed on Vercel
-
-## Local development
-
-Requirements:
-- Node.js 20+
-- npm
-
-Install and run:
+## Develop
 
 ```bash
 npm install
 npm run dev
 ```
 
-Build and quality checks:
+`npm run build` — production build · `npm run lint` — lint
 
-```bash
-npm run build
-npm run lint
-```
+Next.js (App Router) · Tailwind v4 · Source Serif 4 · static on Vercel
 
-## Routes
+## Scope
 
-- `/` — landing
-- `/work` — free software/projects
-- `/consulting` — services
-- `/about` — bio
-- `/blog` — placeholder route (hidden from nav until content exists)
+This repo is only the marketing site. LeadPure, synth, and other products live in their own repos.
 
-## Notes
-
-- This repo is only for the e10d.dev website.
-- Related products (LeadPure, synth app, etc.) live in separate repositories.
-- See `AGENTS.md` for project conventions and working rules.
+Conventions for agents and contributors: [`AGENTS.md`](AGENTS.md).

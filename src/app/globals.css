@@ -67,6 +67,7 @@ footer {
   --orb-rot: 0deg;
   --orb-tilt: 0deg;
   --orb-bank: 0deg;
+  --orb-pulse: 0;
   position: fixed;
   left: 0;
   top: 0;
@@ -88,8 +89,8 @@ footer {
   transform: rotate(var(--orb-rot)) rotateX(var(--orb-tilt)) rotateY(var(--orb-bank));
 }
 
-.orb-iso {
-  opacity: 0.95;
+.orb-chunk {
+  transition: none;
 }
 
 .orb-edge,
@@ -104,15 +105,9 @@ footer {
   stroke-width: 1.05;
 }
 
-.orb-spines {
-  transform-origin: 60px 60px;
-}
-
 .orb-spine {
-  stroke-width: 0.95;
-  opacity: 0.9;
-  transform-origin: 60px 60px;
-  transform: scale(calc(1 + (var(--orb-spine) - 9px) / 44));
+  stroke-width: calc(0.9px + var(--orb-pulse) * 0.2px);
+  opacity: calc(0.72 + var(--orb-pulse) * 0.28);
 }
 
 .dark .orb-edge,
