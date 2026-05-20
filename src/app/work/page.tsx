@@ -1,7 +1,17 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Free Software",
+  description: "Open-source software and experiments by Elliot Winard.",
+};
+
+const linkClass =
+  "text-fg underline decoration-accent/30 underline-offset-2 hover:decoration-accent/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:text-dark-fg dark:decoration-dark-accent/30 dark:hover:decoration-dark-accent/80 dark:focus-visible:outline-dark-accent";
+
 export default function Work() {
   return (
     <>
-      <h1 className="mb-6 text-2xl">Free Software</h1>
+      <h1 className="mb-6 text-xl sm:text-2xl">Free Software</h1>
       <div className="space-y-8">
         <Section title="Software">
           <Item
@@ -49,25 +59,26 @@ export default function Work() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section>
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted dark:text-dark-muted">
+    <section aria-labelledby={`section-${title.toLowerCase().replace(/\s+/g, "-")}`}>
+      <h2
+        id={`section-${title.toLowerCase().replace(/\s+/g, "-")}`}
+        className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted dark:text-dark-muted"
+      >
         {title}
       </h2>
-      <div className="space-y-3">{children}</div>
+      <ul className="m-0 list-none space-y-3 p-0">{children}</ul>
     </section>
   );
 }
 
 function Item({ name, desc, url }: { name: string; desc: string; url: string }) {
   return (
-    <div>
-      <a
-        href={url}
-        className="text-fg underline decoration-accent/30 underline-offset-2 hover:decoration-accent/80 dark:text-dark-fg dark:decoration-dark-accent/30 dark:hover:decoration-dark-accent/80"
-      >
+    <li>
+      <a href={url} rel="noopener noreferrer" className={linkClass}>
         {name}
+        <span className="sr-only"> (external site)</span>
       </a>
-      <p className="text-sm text-muted dark:text-dark-muted">{desc}</p>
-    </div>
+      <p className="mt-0.5 text-sm text-muted dark:text-dark-muted">{desc}</p>
+    </li>
   );
 }
