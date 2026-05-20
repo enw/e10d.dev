@@ -3,11 +3,45 @@
 import { useEffect, useRef } from "react";
 
 const CHUNKS = [
-  { ox: 0, oy: -1, phase: 0, origin: "60px 42px" },
-  { ox: -1, oy: -0.12, phase: 1.4, origin: "28px 56px" },
-  { ox: 1, oy: 0.08, phase: 2.7, origin: "92px 59px" },
-  { ox: 0, oy: 1, phase: 4.1, origin: "60px 80px" },
+  { ox: 0, oy: -1, origin: "60px 42px" },
+  { ox: -1, oy: -0.12, origin: "28px 56px" },
+  { ox: 1, oy: 0.08, origin: "92px 59px" },
+  { ox: 0, oy: 1, origin: "60px 80px" },
 ] as const;
+
+const CYCLE_SEC = 12;
+const FORMED_HOLD = 0.64;
+const RISE_LEN = 0.1;
+const PEAK_LEN = 0.04;
+const FALL_LEN = 0.22;
+
+function smoothstep(u: number) {
+  const c = Math.max(0, Math.min(1, u));
+  return c * c * (3 - 2 * c);
+}
+
+function pulsePhase(t: number) {
+  const p = (t % CYCLE_SEC) / CYCLE_SEC;
+  const riseStart = FORMED_HOLD;
+  const peakStart = riseStart + RISE_LEN;
+  const fallStart = peakStart + PEAK_LEN;
+
+  if (p < riseStart) {
+    return { pulse: 0, rising: false };
+  }
+  if (p < peakStart) {
+    const u = (p - riseStart) / RISE_LEN;
+    return { pulse: smoothstep(u), rising: true };
+  }
+  if (p < fallStart) {
+    return { pulse: 1, rising: false };
+  }
+  if (p < fallStart + FALL_LEN) {
+    const u = (p - fallStart) / FALL_LEN;
+    return { pulse: 1 - smoothstep(u), rising: false };
+  }
+  return { pulse: 0, rising: false };
+}
 
 export function OrbWalker() {
   const orbRef = useRef<HTMLDivElement>(null);
@@ -19,6 +53,7 @@ export function OrbWalker() {
     }
 
     const chunks = Array.from(orbEl.querySelectorAll<SVGGElement>(".orb-chunk"));
+    const chunkSpin = CHUNKS.map(() => 0);
 
     let x = Math.max(32, Math.min(window.innerWidth - 32, window.innerWidth * 0.2));
     let y = Math.max(32, Math.min(window.innerHeight - 32, window.innerHeight * 0.35));
@@ -75,11 +110,18 @@ export function OrbWalker() {
         y = Math.max(0, Math.min(maxY, y));
       }
 
-      const pulse = (Math.sin(t * 0.62) + 1) / 2;
+      const { pulse, rising } = pulsePhase(t);
       const pulseEase = pulse * pulse * (3 - 2 * pulse);
-      const wobbleAmp = 0.6 + pulseEase * 2.4;
 
-      const spine = 8 + pulseEase * 7 + Math.sin(t * 4.1) * 2.5;
+      let spinEnv: number;
+      if (rising) {
+        spinEnv = pulseEase * pulseEase;
+      } else {
+        spinEnv = pulse * pulse;
+      }
+
+      const spinRate = 6 + spinEnv * 34;
+      const spine = 8 + pulseEase * 7;
       const rot = t * 38;
       const tilt = Math.sin(t * 1.1) * 4 + (dx / Math.max(1, window.innerWidth)) * 20;
       const bank = Math.sin(t * 1.4) * 3 + (dy / Math.max(1, window.innerHeight)) * -16;
@@ -91,20 +133,23 @@ export function OrbWalker() {
       el.style.setProperty("--orb-pulse", pulseEase.toFixed(3));
       el.style.transform = `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`;
 
-      const spread = pulseEase * 9;
+      const spread = (rising ? Math.pow(pulseEase, 1.35) : pulseEase) * 9;
 
       chunks.forEach((chunk, i) => {
         const c = CHUNKS[i];
         if (!c) return;
 
-        const wobX = Math.sin(t * 2.4 + c.phase) * wobbleAmp;
-        const wobY = Math.cos(t * 1.85 + c.phase * 1.15) * wobbleAmp;
-        const wobR = Math.sin(t * 1.55 + c.phase * 0.9) * (1.5 + pulseEase * 5);
-        const tx = c.ox * spread + wobX;
-        const ty = c.oy * spread + wobY;
-        const scale = 1 + pulseEase * 0.035 + Math.sin(t * 3.2 + c.phase) * 0.012;
+        const dir = i % 2 === 0 ? 1 : -1;
+        chunkSpin[i] += spinRate * dir;
+        if (pulse < 0.02) {
+          chunkSpin[i] *= 0.9;
+        }
 
-        chunk.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) rotate(${wobR.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        const tx = c.ox * spread;
+        const ty = c.oy * spread;
+        const scale = 1 + pulseEase * 0.03;
+
+        chunk.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) rotate(${chunkSpin[i].toFixed(2)}deg) scale(${scale.toFixed(3)})`;
       });
 
       raf = requestAnimationFrame(step);
